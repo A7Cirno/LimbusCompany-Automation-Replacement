@@ -33,13 +33,16 @@ class JsonMonitorHandler(FileSystemEventHandler):
         """统一事件处理器：无论动的是文件还是文件夹，统统拦截分析"""
 
         # 情况 A：直接对文件进行操作
-        if os.path.isfile(event_path) and os.path.basename(event_path) == 'Skills_personality-12.json':
+        if os.path.isfile(event_path) and (os.path.basename(event_path) == 'Skills_personality-12.json' or os.path.basename(event_path) == 'Passives.json'):
             replace_content(event_path)
 
         # 情况 B：对整个文件夹进行操作（拖拽移入、复制粘贴文件夹）
         elif os.path.isdir(event_path):
             # 自动拼接路径，去该文件夹里“摸奖”看有没有 data.json
             possible_file = os.path.join(event_path, 'Skills_personality-12.json')
+            if os.path.exists(possible_file):
+                replace_content(possible_file)
+            possible_file = os.path.join(event_path, 'Passives.json')
             if os.path.exists(possible_file):
                 replace_content(possible_file)
 
